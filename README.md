@@ -16,7 +16,7 @@ The output data from the model simulations described in this study can be obtain
 
 
 
-The source code is distributed via a git repository at ???  after registration.
+The source code is distributed via a git repository at https://gitlab.osupytheas.fr/mayache/lpjml-med_version1  after registration.
 The registration is free of costs.
 
 All source code, configuration and parameter files are subject to 
