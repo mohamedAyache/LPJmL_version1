@@ -1,0 +1,216 @@
+#!/bin/sh
+#############################################################################
+##                                                                         ##
+##                l  p  j  d  i  s  t  r  i  b  u  t  e                    ##
+##                                                                         ##
+## sh script to create LPJ config files and Loadleveler job control files  ##
+## for a distributed grid. Used for LPJ code without MPI support.          ##
+##                                                                         ##
+## Usage:  lpjdistribute [-class c] [-ngrid n] njobs [LPJargs...]          ##
+##                                                                         ##
+## Last change: 23.01.2013                                                 ##
+##                                                                         ##
+#############################################################################
+
+if [ $# -lt 1 ]
+then
+  echo >&2 Error: Number of jobs missing
+  echo >&2 Usage: $0 [-class c] [-ngrid n] njobs [LPJargs...]
+  exit 1
+fi
+if [ "$LPJROOT" = "" ]
+then
+  echo >&2 Error: environment variable LPJROOT is not set
+  echo >&2 "Set by export LPJROOT=<path to lpjml directory>"
+  exit 1
+fi
+if [ $1 = "-class" ]
+then
+  if [ $# -lt 2 ]
+  then
+    echo >&2 Error: class missing
+    echo >&2 Usage: $0 [-class c] [-ngrid n] njobs [LPJargs...]
+    exit 1
+  fi
+  shift 1
+  class=$1
+  shift 1
+else
+  class=short
+fi
+if [ $1 = "-ngrid" ]
+then
+  if [ $# -lt 2 ]
+  then
+    echo >&2 Error: Number missing
+    echo >&2 Usage: $0 [-class c] [-ngrid n] njobs [LPJargs...]
+    exit 1
+  fi
+  shift 1
+  n=$1
+  shift 1
+else
+  n=67420
+fi
+if [ $# -lt 1 ]
+then
+  echo >&2 Error: Number of jobs missing
+  echo >&2 Usage: $0 [-class c] [-ngrid n] njobs [LPJargs...]
+  exit 1
+fi
+p=$1
+shift 1
+args=$*
+if [ $p -lt 1 ]
+then
+  echo >&2 Error: number of jobs less than one.
+  exit 1
+fi
+index=0
+outdir=output
+restartdir=restart
+while (($index < $p))
+do
+  let suffix=index+1
+  suffix=$(printf "%03d" $suffix)
+  start=$((  n*index / p ))
+  stop=$(( n*(index+1)/p-1 ))
+  cat <<EOF >lpj$suffix.jcf
+#!/bin/ksh
+# @ environment =  COPY_ALL
+# @ input = /dev/null
+# @ output = lpj$suffix.out
+# @ error = lpj$suffix.err
+# @ comment = LPJmL Version $(cat $LPJROOT/VERSION) args: $args
+# @ resources = ConsumableCpus(1)
+# @ class = $class
+# @ notification = complete
+# @ checkpoint = no
+# @ restart = no
+# @ queue
+\$LPJROOT/bin/lpjml $args lpj$suffix.conf
+EOF
+  cat  >lpj$suffix.conf <<EOF
+/*********************************************************************/
+/*                                                                   */
+/*                   l  p  j  $suffix  .  c  o  n  f                     */
+/*                                                                   */
+/* Configuration file for LPJ C Version 3.5.003, created by          */
+/* lpjdistribute                                                     */
+/*                                                                   */
+/* Created: $(date +"%d.%m.%Y")                                               */
+/*                                                                   */
+/*********************************************************************/
+
+#include "include/conf.h" /* include constant definitions */
+
+"LPJmL Run $suffix of $p"
+LPJML
+/*#define ISRANDOM*/  /* random generation of daily precipitation */
+#define WITH_LAIMAX_CFT
+#ifdef ISRANDOM
+RANDOM_PREC /* Random weather generator for precipitation enabled */
+RANDOM_SEED
+#else
+INTERPOLATE_PREC
+#endif
+#ifdef USE_RADIATION
+RADIATION
+#else
+CLOUDINESS
+#endif
+FIRE                 /* fire disturbance enabled */
+NO_FIREWOOD
+NO_POPULATION
+NO_DRAINAGE
+#ifdef PERMAFROST
+PERM
+#else
+NO_PERM
+#endif
+#ifdef WITH_LANDUSE
+#if WITH_LANDUSE == CONST_LANDUSE
+CONST_LANDUSE                  /* constant landuse */
+#else
+LANDUSE                        /* landuse enabled */
+#endif
+NO_FIXED_SDATE
+IRRIGATION
+#ifdef WITH_LAIMAX_CFT
+LAIMAX_CFT
+#else
+LAIMAX_INTERPOLATE
+#endif
+#else
+NO_LANDUSE
+#endif
+NO_WATERUSE
+
+#include "param.conf"  /* parameter file */
+#include "input.conf"  /* Input data files */
+
+#ifdef FROM_RESTART
+
+GRID         RAW $outdir/grid_$suffix.out
+FPC          RAW $outdir/fpc_$suffix.bin
+MNPP         RAW $outdir/mnpp_$suffix.bin
+MRH          RAW $outdir/mrh_$suffix.bin
+MTRANSP      RAW $outdir/mtransp_$suffix.bin
+MRUNOFF      RAW $outdir/mrunoff_$suffix.bin
+MDISCHARGE   RAW $outdir/mdischarge_$suffix.bin
+MEVAP        RAW $outdir/mevap_$suffix.bin
+MINTERC      RAW $outdir/minterc_$suffix.bin
+MSWC1        RAW $outdir/mswc1_$suffix.bin
+MSWC2        RAW $outdir/mswc2_$suffix.bin
+FIREC        RAW $outdir/firec_$suffix.bin
+FIREF        RAW $outdir/firef_$suffix.bin
+VEGC         RAW $outdir/vegc_$suffix.bin
+SOILC        RAW $outdir/soilc_$suffix.bin
+LITC         RAW $outdir/litc_$suffix.bin
+FLUX_ESTAB   RAW $outdir/flux_estab_$suffix.bin
+HARVEST      RAW $outdir/flux_harvest_$suffix.bin
+MIRRIG       RAW $outdir/mirrig_$suffix.bin
+SDATE        RAW $outdir/sdate_$suffix.bin
+PFT_NPP      RAW $outdir/pft_npp_$suffix.bin
+PFT_HARVEST  RAW $outdir/pft_harvest_$suffix.bin
+PFT_RHARVEST RAW $outdir/pft_rharvest_$suffix.bin
+PFT_GCGP     RAW $outdir/waterstress_$suffix.bin
+END
+#else
+
+END  /* no output files */
+
+#endif
+
+$start /* first grid cell */
+$stop /* last grid cell  */
+
+#ifndef FROM_RESTART
+
+1000 /* spinup years */
+30   /* cycle length during spinup (yr) */
+1900 /* first year of simulation */
+1901 /* last year of simulation */
+NO_RESTART /* do not start from restart file */
+RESTART /* create restart file */
+$restartdir/restart_$suffix.lpj /* filename of restart file */
+1900 /* year restart file is written */
+
+#else
+
+0    /* no spinup years */
+1901 /* first year of simulation */
+2003 /* last year of simulation */
+RESTART /* start from restart file */
+$restartdir/restart_$suffix.lpj
+NO_RESTART /* do not create restart file */
+
+#endif
+EOF
+  if llsubmit lpj$suffix.jcf ;
+  then
+    let index=index+1
+  else
+    exit 1
+  fi
+done

@@ -1,0 +1,37 @@
+# ! /bin/ksh 
+###############################################################################
+##                                                                           ##
+##            l  p  j  _  i  n  t  e  l  .  j  c  f                          ##
+##                                                                           ##
+##  LoadLeveler JCF file for running an Intel MPI job on the CLME cluster    ##
+##  at PIK                                                                   ##
+##                                                                           ##
+##  written by Werner von Bloh                                               ##
+##                                                                           ##
+##  Last change: 03.12.2008                                                  ##
+##                                                                           ##
+###############################################################################
+ 
+# @ job_type = parallel
+# @ total_tasks = 64
+# @ class = short
+# @ environment = COPY_ALL
+# @ comment = LPJmL Version 3.4.018
+# @ blocking = unlimited
+# @ output = lpj.$(cluster).out
+# @ error = lpj.$(cluster).err
+# @ queue
+
+llgetmachinelist |sed "s/blade/bi/"  > hostlist.$LOADL_STEP_ID
+#
+cat hostlist.$LOADL_STEP_ID|uniq >mpdhosts.$LOADL_STEP_ID
+machine_count=`cat mpdhosts.$LOADL_STEP_ID  | wc -l`
+node_count=`cat hostlist.$LOADL_STEP_ID  | wc -l`
+
+mpdboot -n $machine_count -r ssh -f mpdhosts.$LOADL_STEP_ID 
+
+mpiexec  -machinefile hostlist.$LOADL_STEP_ID  -n $node_count -env I_MPI_DEVICE rdma:OpenIB-cma-netdev  $LPJROOT/bin/lpjml -DFROM_RESTART $LPJROOT/lpjml.conf
+
+#mpdallexit
+rm hostlist.$LOADL_STEP_ID
+rm mpdhosts.$LOADL_STEP_ID

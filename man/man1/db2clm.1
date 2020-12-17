@@ -1,0 +1,43 @@
+.TH db2clm 1  "December 9, 2008" "version 1.0.001" "USER COMMANDS"
+.SH NAME
+db2clm \- read from the PIK Oracle database into clm data files for LPJmL
+.SH SYNOPSIS
+.B db2clm 
+[-h] [-l] database/password [scenario \fIcoordfile tempfile cloudfile precfile]\fP
+.SH DESCRIPTION
+Program reads climate data from the PIK Oracle database and converts data to clm data files. Environment variables for Oracle has to be set by \fBinst_pikd.sh\fP before calling \fBdb2clm\fP.
+.SH OPTIONS
+.TP
+-h
+display a short help text.
+.TP
+-l
+Print list of scenarios in database.
+.TP
+database/password
+Set database and password to connect.
+.TP
+scenario
+Integer number selecting scenario.
+.TP
+.I coordfile
+Filename of coordinate data to be written.
+.TP
+.I tempfile
+Filename of temperature data to be written.
+.TP
+.I cloudfile
+Filename of cloudiness data to be written.
+.TP
+.I precfile
+Filename of precipitation data to be written.
+.SH EXIT STATUS
+.B db2clm
+returns a zero exit status if the clm files are created.
+Non zero is returned in case of failure.
+.SH AUTHORS
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de),
+Joachim Glauer (Joachim.Glauer@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1), txt2clm(1), grid2clm(1), cft2clm(1), cru2clm(1), inst_pikd.sh(1), clm(5)

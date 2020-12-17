@@ -1,0 +1,34 @@
+.TH newpft.sh 1  "October 9, 2008" "version 3.4.018" "USER COMMANDS"
+.SH NAME
+newpft.sh \- Create new Plant Functional Type (PFT) class 
+.SH SYNOPSIS
+.B newpft.sh
+PFTclass
+.SH DESCRIPTION
+Script creates directory for a new PFT class in $LPJROOT/src, a header file in $LPJROOT/include for the function declarations and function templates in $LPJROOT/src. To use this new PFT class the Makefile in $LPJROOT has to be extended by the new library.
+.SH OPTIONS
+.TP
+PFTclass
+name of the new PFT class.
+.SH EXAMPLE
+.TP
+Create new PFT class treeage
+.B newpft.sh
+treeage
+.PP
+Header file $LPJROOT/treeage.h and directory $LPJROOT/src/treeage including function templates are created.
+.SH ENVIRONMENT
+.TP
+LPJROOT
+defines the root directory for LPJmL. The variable has to be defined before calling 
+\fBnewpft.sh\fP.
+
+.SH EXIT STATUS
+.B newpft.sh 
+returns a zero exit status if new directory and files have been created.
+Non zero is returned in case of failure.
+.SH AUTHOR
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1)

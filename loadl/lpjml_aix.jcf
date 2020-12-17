@@ -1,0 +1,24 @@
+# ! /bin/ksh 
+###############################################################################
+##                                                                           ##
+##               l  p  j  _  a  i  x  .  j  c  f                             ##
+##                                                                           ##
+##  LoadLeveler JCF file for running an MPI job on the AIX cluster           ##
+##  at PIK                                                                   ##
+##                                                                           ##
+##  written by Werner von Bloh                                               ##
+##                                                                           ##
+##  Last change: 14.02.2008                                                  ##
+##                                                                           ##
+###############################################################################
+
+ # @ job_type = parallel
+ # @ output = climlpj.$(cluster).out
+ # @ error = climlpj.$(cluster).err
+ # @ blocking = unlimited
+ # @ total_tasks = 32
+ # @ network.MPI = css0,shared,US
+ # @ executable = /usr/bin/poe
+ # @ arguments = bin/lpjml -DFROM_RESTART lpjml.conf -shared_memory yes -wait_mode poll -euilib "us"
+ # @ class = short
+ # @ queue

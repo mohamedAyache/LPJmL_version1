@@ -1,0 +1,62 @@
+/**********************************************************************/
+/**                                                                  **/
+/**                  p  a  r  a  m  .  p  a  r                       **/
+/**                                                                  **/
+/**  LPJ parameter file for LPJmL version 3.5.003                    **/
+/**                                                                  **/
+/**     Last change: $Date:: 2015-07-15 12:26:32 +0200 (mer. 15 ju#$ **/
+/**     By         : $Author:: bloh                            $     **/
+/**                                                                  **/
+/**********************************************************************/
+
+0.3       /* k_litter10  (1/yr) */
+0.03      /* fast k_soil10  (1/yr) */
+0.001     /* slow k_soil10  (1/yr) */
+20000.0   /* max. snow pack (mm) */
+300.0     /* depth of sublayer at top of upper soil layer (mm) */
+278.0     /* pre-industrial CO2 (ppmv) */
+0.0548    /* k */
+0.7       /* theta */
+0.5       /* k_beer */
+0.08      /* alphac3 */
+0.053     /* alphac4 */
+0.015     /* bc3 leaf respiration as fraction of Vmax for C3 plants */
+0.035     /* bc4 leaf respiration as fraction of Vmax for C4 plants */
+0.25      /* r_growth */
+3.26      /* GM */
+1.391     /* ALPHAM Priestlex-Taylor coefficient*/ 
+3.0e4     /* Michaelis constant for O2 (Pa) at 25 deg C */
+30        /* Michaelis constant for CO2 (Pa) at 25 deg C */
+0.7       /* atmfrac */
+0.98      /* fastfrac */
+0.03      /* asymptotic maximum mortality rate (1/year) (k_mort_max)*/
+0.5       /* coefficient of growth efficiency in mortality equation (k_mort2) */
+#ifdef WITH_LANDUSE
+900       /* annual prec limit for C3 threshold*/
+0.8       /* irrigation threshold C3, prec < aprec_lim */
+0.9       /* irrigation threshold C3, prec >= aprec_lim */
+0.7       /* irrigation threshold C4 */
+1.0       /* irrigation threshold RICE */
+1.0       /* fraction of soil filled with water during irrigation event */
+0.7       /* open canal conveyance efficiency, soil type sand (Ks > 20)*/
+0.75      /* open canal conveyance efficiency, soil type loam (10<=Ks<=20)*/
+0.8       /* open canal conveyance efficiency, soil type clay (Ks<10) */
+0.95      /* pressurized conveyance efficiency*/
+1.15      /* saturation level surface irrigation*/
+0.55      /* saturation level sprinkler irrigation*/
+0.05       /* saturation level drip irrigation*/
+0.6       /* reduction of drip soil evap */
+5         /* maximum LAI */
+1         /* intercrops on setaside (0:FALSE, 1:TRUE) */
+0         /* remove residuals (0:FALSE, 1:TRUE) */
+1900      /* year in which sowing dates shall be fixed */
+2000      /* set landuse year for LANDUSE_CONST case */
+#ifdef WITH_RWMANAGEMENT
+0.0       /* reduction of soil evaporation */ 
+0.0       /* rw_buffer_max, size of rainwater harvesting tank [mm] */ 
+0.0       /* frac_ro_stored, fraction of surface runoff stored in tank */ 
+0.0       /* rw_irrig_thres, threshold to apply rw_irrigation */
+2         /* values > 2 (default) increase soil infiltration on rainfed and irrigated managed land */
+0.0       /* yield-gap bridge: factor by which laimax value is closed (7 - country-value)*factor */
+#endif
+#endif

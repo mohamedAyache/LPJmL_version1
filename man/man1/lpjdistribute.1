@@ -1,0 +1,47 @@
+.TH lpjdistribute 1  "October 9, 2008" "version 3.4.018" "USER COMMANDS"
+.SH NAME
+lpjdistribute \- Submit LoadLeveler jobs for distributed LPJmL simulation 
+.SH SYNOPSIS
+.B lpjdistribute
+[\-class c] [\-ngrid n] njobs [LPJargs ...]
+.SH DESCRIPTION
+Script creates LPJmL configuration and LoadLeveler job control files and submits the jobs to the LoadLeveler queue. LPJmL grid is distributed equally over all jobs. Script creates njobs LPJmL configuration files named lpj<nnn>.conf, where <nnn> is the job
+number ranging from 0 to njobs-1. Used for the sequential LPJmL code without MPI support. For model runs with river routing enabled use \fBlpjdistribute_river\fP.
+.SH OPTIONS
+.TP
+\-class c
+set the LoadLeveler class to which the job will be submitted. Default class is 'short'. Valid classes can be obtained by the
+.B llclass
+command.
+.TP
+\-ngrid n
+Number of grid cells. Default is 67420.
+.TP
+njobs
+set the number of jobs submitted to the LoadLeveler queue. Must be an integer greater than zero.
+.TP
+LPJargs
+set command line arguments for the
+.B lpjml
+program.
+.SH EXAMPLES
+.TP
+Submit 32 jobs starting from restart file to LoadLeveler class short:
+.B lpjdistribute
+\-class short 32 -DFROM_RESTART
+.PP
+.SH ENVIRONMENT
+.TP
+LPJROOT
+defines the root directory for LPJmL. The variable has to be defined before calling 
+\fBlpjdistribute\fP.
+
+.SH EXIT STATUS
+.B lpjdistribute 
+returns a zero exit status if LoadLeveler job has been submitted.
+Non zero is returned in case of failure.
+.SH AUTHOR
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1), lpjcheck(1), lpjcat(1), cat2bsq(1), output_bsq(1), lpjdistribute_river(1), llclass(1), llsubmit(1)
