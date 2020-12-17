@@ -1,0 +1,38 @@
+.TH lpjshuffle 1  "October 10, 2008" "version 1.0.005" "USER COMMANDS"
+.SH NAME
+lpjshuffle \- Shuffles input data files for LPJmL.
+.SH SYNOPSIS
+.B lpjshuffle
+[\-h] [\-inpath \fIdir\fP] [[\-Dmacro[=value]] [\-I\fIdir\fP] ...]
+\fIfilename\fP
+.SH DESCRIPTION
+Program shuffles input data files for LPJmL model runs in order to balance load
+in the parallel MPI code. New input files will be generated with suffix '_shuffle' appended to the filename of the original input filenames. Shuffling should not be used for model runs with river routing enabled.
+.SH OPTIONS
+.TP
+\-h
+display a short help text
+.TP
+\-inpath \fIdir\fP
+set the input directory path. The path is added to the input filenames if they do not
+contain an absolute path.
+.TP
+\-Dmacro[=value]
+define macro for the preprocessor of the configuration file
+.TP
+\-I\fIdir\fP
+define include directory for the preprocessor of the configuration file
+.TP
+.I filename
+name of configuration file, default is 
+\fIlpjml.conf\fP.
+
+.SH EXIT STATUS
+.B lpjshuffle 
+returns a zero exit status if the shuffled input files have been created.
+Non zero is returned in case of failure.
+.SH AUTHORS
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de),
+
+.SH SEE ALSO
+lpjml(1)

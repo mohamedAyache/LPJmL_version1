@@ -1,0 +1,85 @@
+.TH plotclimate 1  "December 9, 2008" "version 1.0.009" "USER COMMANDS"
+.SH NAME
+plotclimate \- Plot global map of climate variables for LPJmL simulation 
+.SH SYNOPSIS
+.B plotclimate
+[\-h] [\-inpath \fIdir\fP] [[\-Dmacro[=value]] [\-I\fIdir\fP] ...] [\fIfilename\fP [-log] [\-step n] [-scale min max] [\-o \fIgmfname\fP] [variable [year [day|month]]]] 
+.SH DESCRIPTION
+Program plots a global map for output variables of a LPJmL simulation run. A gmf file is generated that can be converted to PostScript by \fBgmfps\fP or displayed on screen by \fBxgmf\fP.
+.SH OPTIONS
+.TP
+\-h
+display a short help text
+\-inpath \fIdir\fP
+set the input directory path. The path is added to the input filenames if they do not contain an absolute path.
+.TP
+\-Dmacro[=value]
+define macro for the preprocessor of the configuration file
+.TP
+\-I\fIdir\fP
+define include directory for the preprocessor of the configuration file
+.TP
+.I filename
+name of configuration file, default is \fIlpjml.conf\fP.
+.TP
+-log
+Set logarithmic scaling of output data.
+.TP
+-step n
+Set number of colors in plot.
+.TP
+-scale min max
+Set scaling of output data.
+.TP
+-o \fIgmfname\fP
+Set output filename of gmf graphics file. File suffix \fI.gmf\fP is added to the filename.
+Default is \fIclimate.gmf\fP.
+.TP
+variable
+Select climate variable. Valid variable names are temp, prec, cloud, wet. Default variable is temp.
+.TP
+year
+select output year. Default is first simulation year.
+.TP
+month
+select output month for monthly climate data. Default month is January.
+.TP
+day
+select output day for daily climate data. Default day is first day of year.
+.SH EXAMPLES
+.TP
+Plot global temperature  data (temp) for simulation year 2003:
+.B plotclimate
+lpjml.conf temp 2003
+.TP
+Plot monthly precipitation (prec) map for June 2003 on a logarithmic scale:
+.B plotclimate
+lpjml.conf -log prec 2003 6
+.PP
+.SH ENVIRONMENT
+.TP
+LPJCONFIG
+default LPJmL configuration filename
+.TP
+LPJPREP 
+defines preprocessor command for LPJmL configuration file, default is \fBcpp -P\fP.
+.TP
+LPJROOT
+defines the root directory for LPJmL. This directory is added to the
+include directories of the preprocessor
+.TP
+LPJINPATH
+Path appended to the input filenames. Only done for filenames without absolute path.
+.TP
+LPJOPTIONS     
+runtime options for the preprocessor of LPJmL configuration files
+
+.SH EXIT STATUS
+.B plotclimate
+returns a zero exit status if the gmf graphic file has been created.
+Non zero is returned in case of failure.
+.SH AUTHOR
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1), plotlpj(1), xgmf(1), gmfps(1)

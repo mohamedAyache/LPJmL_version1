@@ -1,0 +1,69 @@
+#!/bin/ksh
+###############################################################################
+##                                                                           ##
+##           l  p  j  s  a  v  e                                             ##
+##                                                                           ##
+##    sh script to save LPJmL input/output to Tivoli Storage Manager TSM     ##
+##                                                                           ##
+##    Usage: lpjsave [-h] [-virtualnode node] [-password pwd] [-descr title] ##
+##                   [-noinput] [LPJargs...]                                 ##
+##                                                                           ##
+##    written by Werner von Bloh, PIK Potsdam                                ##
+##                                                                           ##
+##    Last change: 25.10.2011                                                ##
+##                                                                           ##
+###############################################################################
+
+if [ $1 = "-h" ]
+then 
+    echo Usage: $0 [-h] [-virtualnode node] [password=pwd] [-descr c] [-noinput] [LPJargs ...]
+    exit 0
+fi
+
+if [ $1 = "-virtualnode" ]
+then
+  if [ $# -lt 2 ]
+  then
+    echo >&2 Error: virtual node missing
+    echo >&2 Usage: $0 [-h] [-virtualnode node] [password=pwd] [-descr c] [-noinput] [LPJargs ...]
+    exit 1
+  fi
+  shift 1
+  virtualnode=-virtualnode=$1
+  shift 1
+fi
+
+if [ $1 = "-password" ]
+then
+  if [ $# -lt 2 ]
+  then
+    echo >&2 Error: password missing
+    echo >&2 Usage: $0 [-h] [-virtualnode node] [password=pwd] [-descr c] [-noinput] [LPJargs ...]
+    exit 1
+  fi
+  shift 1
+  password=-password=$1
+  shift 1
+fi
+
+if [ $1 = "-descr" ]
+then
+  if [ $# -lt 2 ]
+  then
+    echo >&2 Error: description missing
+    echo >&2 Usage: $0 [-h] [-virtualnode node] [password=pwd] [-descr c] [-noinput] [LPJargs ...]
+    exit 1
+  fi
+  shift 1
+  descr=$1
+  shift 1
+else
+  descr="LPJmL Version $(cat $LPJROOT/VERSION)"
+fi
+
+if lpjfiles $*|tail -n +2|sort|uniq|tar -cf files.tar -T - ;
+then
+  gzip -f files.tar
+  dsmc archive files.tar.gz $virtualnode $password -des=\"$descr\" 
+  rm files.tar.gz
+fi

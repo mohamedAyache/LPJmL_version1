@@ -1,0 +1,82 @@
+.TH lpjsave 1  "October 21, 2011" "version 3.5.004" "USER COMMANDS"
+.SH NAME
+lpjsave \- Save input/output files of LPJmL using Tivoli Storage Manager TSM 
+.SH SYNOPSIS
+.B lpjsave
+[\-h] [-virtualnode node] [-password pw] [-descr string] [\-noinput] [-pp cmd] [\-outpath \fIdir\fP]
+[\-inpath \fIdir\fP] [\-restartpath \fIdir\fP] [[\-Dmacro[=value]] [\-I\fIdir\fP] ...]
+[\fIfilename\fP]
+.SH DESCRIPTION
+Shell script saves all input and output files of LPJmL configuration files into TSM archive. Needs TSM to be installed.
+.SH OPTIONS
+.TP
+\-h
+display a short help text
+.TP
+\-virtualnode node
+Virtual node of TSM
+.TP
+\-password pw
+Password of TSM account
+.TP
+\-descr string
+Description of archive stored in TSM
+.TP
+\-noinput
+does not save input data files
+.TP
+\-pp cmd
+Set preprocessor program to cmd. Default is \fBcpp -P\fP.
+.TP
+\-outpath \fIdir\fP
+set the output directory path. The path is added to the output filenames if they do not contain an absolute path.
+.TP
+\-inpath \fIdir\fP
+set the input directory path. The path is added to the input filenames if they do not contain an absolute path.
+.TP
+\-Dmacro[=value]
+define macro for the preprocessor of the configuration file
+.TP
+\-I\fIdir\fP
+define include directory for the preprocessor of the configuration file
+.TP
+.I filename
+name of configuration file, default is \fIlpjml.conf\fP.
+.SH EXAMPLES
+.TP
+Archive files without input files.
+.B lpjsave 
+-virtualnode node -password pd -descr "LPJmL results" -noinput -DFROM_RESTART lpjml.conf
+.PP
+.SH ENVIRONMENT
+.TP
+LPJCONFIG
+default LPJmL configuration filename
+.TP
+LPJPREP 
+defines preprocessor command for LPJmL configuration file, default is \fBcpp -P\fP. Same as '-pp' option.
+.TP
+LPJROOT
+defines the root directory for LPJmL. This directory is added to the
+include directories of the preprocessor
+.TP
+LPJINPATH
+Path appended to the input filenames. Only done for filenames without absolute path.
+.TP
+LPJOPTIONS     
+runtime options for the preprocessor of LPJmL configuration files
+.TP
+LPJOUTPATH
+Path appended to the output filenames. Only done for filenames without absolute path.
+.TP
+LPJRESTARTPATH
+Path appended to the restart filenames. Only done for filenames without absolute path.
+
+.SH EXIT STATUS
+.B
+Non zero is returned in case of failure.
+.SH AUTHOR
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1), lpjcheck(1), lpjfiles(1), lpjml.conf(5)

@@ -1,0 +1,104 @@
+.TH plotlpj 1  "January 13, 2009" "version 1.0.012" "USER COMMANDS"
+.SH NAME
+plotlpj \- Plot global map for output variables of LPJmL simulation 
+.SH SYNOPSIS
+.B plotlpj
+[\-h] [\-outpath \fIdir\fP] [\-inpath \fIdir\fP] [[\-Dmacro[=value]] [\-I\fIdir\fP] ...] [\fIfilename\fP [-l] [-swap] [-log] [-step n] [-scale min max] [-o \fIgmfname\fP] [variable [year [day|month]]]]
+.SH DESCRIPTION
+Program plots a global map for output variables of a LPJmL simulation run. A gmf file is generated that can be converted to PostScript by \fBgmfps\fP or displayed on screen by \fBxgmf\fP.
+.SH OPTIONS
+.TP
+\-h
+display a short help text
+.TP
+\-outpath \fIdir\fP
+set the output directory path. The path is added to the output filenames if they do not contain an absolute path.
+.TP
+\-inpath \fIdir\fP
+set the input directory path. The path is added to the input filenames if they do not contain an absolute path.
+.TP
+\-Dmacro[=value]
+define macro for the preprocessor of the configuration file
+.TP
+\-I\fIdir\fP
+define include directory for the preprocessor of the configuration file
+.TP
+.I filename
+name of configuration file, default is \fIlpjml.conf\fP.
+.TP
+-l
+list all output variables available in the simulation run.
+.TP
+-swap
+change byte order in output data.
+.TP
+-log
+Set logarithmic scaling of output data.
+.TP
+-step n
+Set number of colors in plot.
+.TP
+-scale min max
+Set scaling of output data.
+.TP
+-o \fIgmfname\fP
+Set output filename of gmf graphics file. File suffix \fI.gmf\fP is added to the filename. Default is \fIplot.gmf\fP.
+.TP
+variable
+Select output variable. Valid variables are firec, firef, vegc, soilc, litc, mg_vegc, mg_soilc,
+mg_litc, aprec, input_lake, adischarge, flux_estab, harvest, prod_turnover, deforest_emis, mnpp, mgpp, d_npp, d_daylength, mrh, mtransp,
+mrunoff, mdischarge, mevap, minterc, mswc1, mswc2, mirrig, mreturn_flow_b, mevap_lake. Default is vegc.
+.TP
+year
+select output year. Default is first simulation year.
+.TP
+month
+select output month for monthly output data.
+.TP
+day
+select output day for daily output data.
+.SH EXAMPLES
+.TP
+List all output variables defined in \fIlpjml.conf\fP:
+.B plotlpj
+-DFROM_RESTART lpjml.conf -l
+.TP
+Plot soil carbon map (soilc) for simulation year 2003:
+.B plotlpj
+-DFROM_RESTART lpjml.conf soilc 2003
+.TP
+Plot monthly evaporation (mevap) map for June 2003:
+.B plotlpj
+-DFROM_RESTART lpjml.conf mevap 2003 6
+.PP
+.SH ENVIRONMENT
+.TP
+LPJCONFIG
+default LPJmL configuration filename
+.TP
+LPJPREP 
+defines preprocessor command for LPJmL configuration file, default is \fBcpp -P\fP.
+.TP
+LPJROOT
+defines the root directory for LPJmL. This directory is added to the
+include directories of the preprocessor
+.TP
+LPJINPATH
+Path appended to the input filenames. Only done for filenames without absolute path.
+.TP
+LPJOPTIONS     
+runtime options for the preprocessor of LPJmL configuration files
+.TP
+LPJOUTPATH
+Path appended to the output filenames. Only done for filenames without absolute path.
+
+.SH EXIT STATUS
+.B
+plotlpj
+returns a zero exit status if the gmf graphic file has been created.
+Non zero is returned in case of failure.
+.SH AUTHOR
+Werner von Bloh (Werner.von.Bloh@pik-potsdam.de)
+
+.SH SEE ALSO
+lpjml(1), plotclimate(1), xgmf(1), gmfps(1)

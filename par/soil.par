@@ -1,0 +1,52 @@
+/*********************************************************************/
+/**                                                                 **/
+/**                    s  o  i  l  .  p  a  r                       **/
+/**                                                                 **/
+/**    Soil parameter data for LPJmL version 3.5.003                **/
+/**                                                                 **/
+/**    Last change: 14.07.2009                                      **/
+/**                                                                 **/
+/*********************************************************************/
+
+#include "../include/soilpar.h"
+
+200         /* soil depth layer (mm) */
+300         /* soil depth layer (mm) */
+500         /* soil depth layer (mm) */
+1000        /* soil depth layer (mm) */
+1000        /* soil depth layer (mm) */
+10000       /* soil depth layer (mm) */
+
+200         /* layerbound (mm) */
+500         /* layerbound (mm) */
+1000        /* layerbound (mm) */
+2000        /* layerbound (mm) */
+3000        /* layerbound (mm) */
+13000       /* layerbound (mm) */
+
+1 1.2 1.4 0 /* fuel bulk density factors */
+
+9 /* Number of soiltypes */
+
+
+/*
+ID                  Name                Ks     Sf    w_pwp  w_fc w_sat hsg tdiff_0 tdiff_15 tdiff_100 cond_pwp cond_100 cond_100_ice
+------------------  ------------------- ----   ----  ----- ----- ----- --- ------- -------- --------- -------- -------- -------------*/
+COARSE             "coarse"             62.1    49   0.05  0.20  0.40  1   0.11    0.200    0.8       0.300    2.00     2.50
+MEDIUM             "medium"             12.0    89   0.05  0.15  0.45  2   0.20    0.650    0.4       0.200    1.00     1.60
+FINE_NONVERTISOL   "fine nonvertisol"    3.9   273   0.10  0.30  0.50  4   0.20    0.500    0.4       0.150    1.30     1.70
+MEDIUM_COARSE      "medium coarse"      27.1   110   0.15  0.20  0.40  3   0.20    0.725    0.4       0.250    1.50     2.00
+FINE_COARSE        "fine coarse"        15.5   239   0.05  0.25  0.38  2   0.20    0.650    0.4       0.225    1.65     2.05
+FINE_MEDIUM        "fine medium"         6.9   209   0.10  0.25  0.49  1   0.20    0.575    0.4       0.175    1.15     1.65
+FINE_MEDIUM_COARSE "fine medium coarse" 14.5   219   0.20  0.35  0.60  4   0.20    0.650    0.4       0.217    1.43     1.93
+ORGANIC            "organic"            29.9    61   0.25  0.40  0.50  2   0.10    0.100    0.1       0.070    0.80     1.10
+FINE_VERTISOL      "fine vertisol"       1.3   316   0.15  0.20  0.40  1   0.20    0.500    0.4       0.150    1.30     1.60       /*
+------------------ -------------------- ----- ----  -----  --- ----- ---  -----   ------ -------    --------  -----    -----*/
+
+/* hydraulic conductivity (mm/h)
+ * Suction head (mm)
+ * tdiff0: thermal diffusivity (mm^2/s) at wilting point (0% whc) 
+ * tdiff15: thermal diffusivity (mm^2/s) at 15% whc 
+ * tdiff100: thermal diffusivity (mm^2/s) at field capacity (100% whc) 
+ * thermal diffusivities follow van Duin (1963), Juri et al. (1991), Fig.5.11. 
+ */

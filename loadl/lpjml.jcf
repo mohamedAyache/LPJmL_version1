@@ -1,0 +1,29 @@
+# ! /bin/ksh 
+###############################################################################
+##                                                                           ##
+##            l  p  j  _  m  p  i  c  h  .  j  c  f                          ##
+##                                                                           ##
+##  LoadLeveler JCF file for running an MPICH job on the CLME cluster        ##
+##  at PIK                                                                   ##
+##                                                                           ##
+##  written by Werner von Bloh                                               ##
+##                                                                           ##
+##  Last change: 28.02.2008                                                  ##
+##                                                                           ##
+###############################################################################
+
+# @ job_type = parallel
+# @ total_tasks =  32
+# @ class = short
+# @ blocking = unlimited
+# @ output = lpj.$(cluster).out
+# @ error = lpj.$(cluster).err
+# @ queue
+
+llgetmachinelist > hostlist.$LOADL_STEP_ID
+#
+machine_count=`cat hostlist.$LOADL_STEP_ID  | wc -l`
+
+mpirun_ssh -ssh  -hostfile hostlist.$LOADL_STEP_ID -np $machine_count bin/lpjml -DFROM_RESTART lpjml_full.conf
+
+hostlist.$LOADL_STEP_ID
