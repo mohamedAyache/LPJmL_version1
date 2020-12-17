@@ -20,20 +20,19 @@ compiler.
 
 create LPJmL directory:
 
-mkdir lpjml
+mkdir lpjml-med
 
-Go to LPJmL directory:
+Go to LPJmL-Med directory:
 
-cd lpjml
+cd lpjml-med
 
 untar source and data files
 
-gzip -cd lpjml-3.5.003.tar.gz|tar -xf -
-gzip -cd cru.tar.gz|tar -xf -
+load the model code :: the source code is distributed via a git repository at https://gitlab.osupytheas.fr/mayache/lpjml-med_version1 
 
 Directory tree after extracting the tar files:
 
---lpjml
+  --lpjml
   |
   +-config        : OS- and compiler-specific Makefiles
   |
