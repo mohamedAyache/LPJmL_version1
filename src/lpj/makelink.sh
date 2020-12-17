@@ -1,0 +1,21 @@
+dirin=../../../sources/corr_files
+ln -sfv ${dirin}/iterateyear_river.c
+ln -sfv ${dirin}/ismonthlyoutput.c
+ln -sfv ${dirin}/outputbuffersize.c
+ln -sfv ${dirin}/standlist.c
+ln -sfv ${dirin}/update_annual.c
+ln -sfv ${dirin}/initoutput_monthly.c
+ln -sfv ${dirin}/freadcell.c
+ln -sfv ${dirin}/update_monthly.c
+ln -sfv ${dirin}/freadstand.c
+ln -sfv ${dirin}/fwriteoutput_monthly.c
+ln -sfv ${dirin}/fwritestand.c
+ln -sfv ${dirin}/fscanconfig.c
+ln -sfv ${dirin}/drain.c
+ln -sfv ${dirin}/update_outputmonthly.c
+ln -sfv ${dirin}/fwritecell.c
+ln -sfv ${dirin}/newgrid.c
+ln -sfv ${dirin}/initdrain.c
+ln -sfv ${dirin}/newoutputmonthly.c
+ln -sfv ${dirin}/update_daily.c
+ln -sfv ${dirin}/iterate.c

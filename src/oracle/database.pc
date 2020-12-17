@@ -1,0 +1,159 @@
+/***************************************************************************/
+/**                                                                       **/
+/**                       d  a  t  a  b  a  s  e  .  p  c                 **/
+/**                                                                       **/
+/**     Functions for accessing an Oracle database using embedded SQL.    **/
+/**     Must be compiled by the proc preprocessor.                        **/
+/**                                                                       **/
+/**     written by Werner von Bloh, Joachim Glauer                        **/
+/**     Potsdam Institute for Climate Impact Research                     **/
+/**     PO Box 60 12 03                                                   **/
+/**     14412 Potsdam/Germany                                             **/
+/**                                                                       **/
+/**     Last change:  15.12.2008                                          **/
+/**                                                                       **/
+/***************************************************************************/
+
+#ifndef ORA_PROC
+#include <stdio.h>
+#include <string.h>
+#include <sqlca.h>
+#include <stdlib.h>
+#include <sqlda.h>
+#include <sqlcpr.h>
+#include "types.h"
+#else
+typedef unsigned long size_t;
+#endif
+#include "database.h"
+
+static void sql_error(void)
+{
+  char err_msg[512];
+  size_t buf_len, msg_len;
+
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+/* Call sqlglm() to get the complete text of the
+ * error message.
+ */
+
+  buf_len = sizeof (err_msg);
+  sqlglm(err_msg, &buf_len, &msg_len);
+    
+  EXEC SQL ROLLBACK RELEASE;
+
+  fprintf(stderr,"Error in database: %.*s\n",(int)msg_len,err_msg);
+  exit(EXIT_FAILURE);
+} /* of 'sqlerror' */
+
+void db_connect(const char *username,const char *password)
+{
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  if(password!=NULL)
+    EXEC SQL CONNECT :username IDENTIFIED BY :password; 
+  else
+    EXEC SQL CONNECT :username;
+} /* of 'db_connect' */
+
+int db_getncoords(void)
+{
+  int n;
+
+  EXEC SQL SELECT COUNT(id_in) INTO :n FROM badg_grids;
+
+  return n;
+} /* of 'db_getncoords' */
+
+int db_getnscenarios(void)
+{
+  int n;
+
+  EXEC SQL SELECT COUNT(scenario_id) INTO :n FROM badg_grids_data_sets;
+
+  return n;
+} /* of 'db_getnscenarios' */
+
+void db_getscenarios(int scenarios[],int n)
+{
+  EXEC SQL DECLARE scenario CURSOR FOR
+    SELECT scenario_id FROM badg_grids_data_sets;
+  EXEC SQL OPEN scenario;
+  EXEC SQL FOR :n FETCH scenario INTO :scenarios;
+  EXEC SQL CLOSE scenario;
+} /* of 'db_getscenarios' */
+
+static char *delctrl(char *s)
+{
+  int i;
+  for(i=0;i<strlen(s);i++)
+  {
+    if(s[i]<' ') /* is control character? */
+      s[i]=' '; /* yes, change to blank */
+  }
+  return s;
+} /* of 'delctrl' */
+
+void db_printscenarios(void)
+{
+  int i,year,n,id;
+  VARCHAR desc[128];
+  EXEC SQL SELECT COUNT(scenario_id) INTO :n FROM badg_grids_data_sets;
+  EXEC SQL DECLARE scenario2 CURSOR FOR
+    SELECT * FROM badg_grids_data_sets;
+  EXEC SQL OPEN scenario2;
+  printf("Scenario Id Description                    Insert year\n"
+         "----------- ------------------------------ -----------\n");
+  for(i=0;i<n;i++)
+  {
+    EXEC SQL FETCH scenario2 INTO :id,:desc,:year;
+    desc.arr[desc.len]='\0';
+    printf("%11d %-30s %11d\n",id,delctrl((char *)desc.arr),year);
+  } 
+  printf("----------- ------------------------------ -----------\n");
+  EXEC SQL CLOSE scenario2;
+} /* of 'db_printscenarios' */
+
+void db_getdescr(char *descr,int scenario)
+{
+  VARCHAR desc[128];
+  EXEC SQL SELECT beschreibung INTO :desc FROM badg_grids_data_sets
+           WHERE scenario_id=:scenario;
+  desc.arr[desc.len]='\0';
+  strcpy(descr,delctrl((char *)desc.arr));
+} /* of 'db_getdesc' */
+
+void db_getcoords(float lon[],float lat[],int n)
+{
+  EXEC SQL DECLARE coord CURSOR FOR
+    SELECT lon_c,lat_c FROM badg_grids
+    ORDER BY id_in;
+  EXEC SQL OPEN coord;
+  EXEC SQL FOR :n FETCH coord INTO :lon,:lat;
+  EXEC SQL CLOSE coord;
+} /* of 'db_getcoords' */
+
+void db_getclimate(float temp[],float cloud[],float prec[],int index,int year,
+                   int scenario)
+{
+  int n;
+  n=(isleapyear(year)) ? 366 : 365;
+  EXEC SQL DECLARE climate CURSOR FOR
+    SELECT tmean,cloud,precip FROM  badg_grids_facts 
+    WHERE scenario_id=:scenario AND year=:year AND id_in=:index 
+    ORDER BY day;
+  EXEC SQL OPEN climate;
+  EXEC SQL FOR :n FETCH climate INTO :temp,:cloud,:prec; 
+  EXEC SQL CLOSE climate;
+} /* of 'db_getclimate' */
+
+void db_getyears(int *first,int *last,int scenario)
+{
+  EXEC SQL SELECT MIN(year),MAX(year) INTO :first,:last FROM badg_grids_facts 
+           WHERE scenario_id=:scenario and id_in=0;
+} /* of 'db_getyears' */
+
+void db_close(void)
+{
+  EXEC SQL COMMIT WORK RELEASE;
+} /* of 'db_close' */

@@ -1,0 +1,85 @@
+mpicc -Wall -m64 -DUSE_RAND48 -DUSE_MPI -DSAFE -DWITH_FPE -DUSE_TGAMMA -O3 -I../../include -c nit_update_water.c
+nit_update_water.c: In function ‘nit_update_river’:
+nit_update_water.c:45:26: error: too many arguments to function ‘nit_update_phyto’
+                          &tendphy, &tendno3, &tendnh4, &tendpo4);
+                          ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:175:13: note: declared here
+ extern void nit_update_phyto(const Cell *, Real *, Real *, Real *, Real *, const Real);
+             ^
+nit_update_water.c:49:24: error: too many arguments to function ‘nit_immo_water’
+                        &tendres, &tenddecc, &tendno3, &tendnh4, &tendpo4);
+                        ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:154:13: note: declared here
+ extern void nit_immo_water(const Cell *, const Real, Real *, Real *, Real *, Real *, Real *, const Real);
+             ^
+nit_update_water.c:53:22: error: too many arguments to function ‘nit_watdenit’
+                      &tendno3);
+                      ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:144:13: note: declared here
+ extern void nit_watdenit(const Cell *, Real *, const Real);
+             ^
+nit_update_water.c:57:33: error: too many arguments to function ‘nit_nitrification_water’
+                                 &tendno3, &tendpo4);
+                                 ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:170:13: note: declared here
+ extern void nit_nitrification_water(const Cell *, const Real, Real *, Real *);
+             ^
+nit_update_water.c:61:28: error: too many arguments to function ‘nit_wat_adsorption’
+                            &tendpo4);
+                            ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:134:13: note: declared here
+ extern void nit_wat_adsorption(const Cell *, const Real, Real *);
+             ^
+nit_update_water.c: In function ‘nit_update_lakes’:
+nit_update_water.c:102:13: error: too many arguments to function ‘nit_update_phyto’
+             &tendphy, &tendno3, &tendnh4, &tendpo4);
+             ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:175:13: note: declared here
+ extern void nit_update_phyto(const Cell *, Real *, Real *, Real *, Real *, const Real);
+             ^
+nit_update_water.c:106:13: error: too many arguments to function ‘nit_watdenit’
+             &tendno3);
+             ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:144:13: note: declared here
+ extern void nit_watdenit(const Cell *, Real *, const Real);
+             ^
+nit_update_water.c:110:13: error: too many arguments to function ‘nit_nitrification_water’
+             &tendno3, &tendpo4); 
+             ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:170:13: note: declared here
+ extern void nit_nitrification_water(const Cell *, const Real, Real *, Real *);
+             ^
+nit_update_water.c:114:13: error: too many arguments to function ‘nit_wat_adsorption’
+             &tendpo4);
+             ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:134:13: note: declared here
+ extern void nit_wat_adsorption(const Cell *, const Real, Real *);
+             ^
+nit_update_water.c:120:13: error: too many arguments to function ‘nit_immo_water’
+             &tendres, &tenddecc, &tendno3, &tendnh4, &tendpo4);
+             ^
+In file included from ../../include/lpj.h:98:0,
+                 from nit_update_water.c:2:
+../../include/nitrogen.h:154:13: note: declared here
+ extern void nit_immo_water(const Cell *, const Real, Real *, Real *, Real *, Real *, Real *, const Real);
+             ^
+Makefile:76: recipe for target 'nit_update_water.o' failed
+make: *** [nit_update_water.o] Error 1
